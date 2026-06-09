@@ -1,7 +1,12 @@
+import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  /* config options here */
-};
+// Cấu hình Next.js cơ bản
+const nextConfig: NextConfig = {};
 
-export default nextConfig;
+// Export Next.js config với Sentry integration
+export default withSentryConfig(nextConfig, {
+  org: "davegray-repair-shop",
+  project: "davegray-repair-shop",
+  silent: true,
+});

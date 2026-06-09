@@ -1,13 +1,20 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Inter } from "next/font/google";
+import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 
+// Font Inter với CSS variable để sử dụng trong Tailwind
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
+// Metadata cho SEO - tiêu đề và mô tả trang
 export const metadata: Metadata = {
-  title: "Tạo ứng dụng Next",
-  description: "Được tạo bởi create next app",
+  title: {
+    template: "%s | Cửa Hàng Sửa Chữa Máy Tính",
+    default: "Cửa Hàng Sửa Chữa Máy Tính",
+  },
+  description: "Cửa Hàng Sửa Chữa Máy Tính - Dịch Vụ Sửa Chữa Chuyên Nghiệp",
+  applicationName: "Cửa Hàng Sửa Chữa Máy Tính",
 };
 
 export default function RootLayout({
@@ -16,8 +23,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className={cn("font-sans", inter.variable)}>
-      <body>{children}</body>
+    <html
+      lang="vi"
+      className={cn("font-sans", inter.variable)}
+      suppressHydrationWarning
+    >
+      <body>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
