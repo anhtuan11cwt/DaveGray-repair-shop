@@ -6,18 +6,18 @@ import { cn } from "@/lib/utils";
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-	title: "Tạo ứng dụng Next",
-	description: "Được tạo bởi create next app",
+  title: "Tạo ứng dụng Next",
+  description: "Được tạo bởi create next app",
 };
 
 export default function RootLayout({
-	children,
+  children,
 }: Readonly<{
-	children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-	return (
-		<html lang="vi" className={cn("font-sans", inter.variable)}>
-			<body>{children}</body>
-		</html>
-	);
+  return (
+    <html lang="vi" className={cn("font-sans", inter.variable)}>
+      <body>{children}</body>
+    </html>
+  );
 }
