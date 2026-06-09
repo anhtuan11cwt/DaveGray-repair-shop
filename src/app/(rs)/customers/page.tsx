@@ -1,8 +1,8 @@
 export const metadata = {
-  title: "Customers",
+  title: "Khách hàng",
 };
 
 // Trang quản lý khách hàng
 export default function CustomersPage() {
-  return <h2 className="text-2xl font-bold">Customers</h2>;
+  return <h2 className="text-2xl font-bold">Khách hàng</h2>;
 }

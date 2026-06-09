@@ -1,24 +1,31 @@
 "use client";
 
-import { File, Home, Menu, UsersRound, X } from "lucide-react";
+import { File, Home, LogIn, Menu, UserPlus, UsersRound, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
-// Danh sách navigation links cho mobile menu
-const navLinks = [
-  { icon: Home, label: "Home", href: "/home" },
-  { icon: File, label: "Tickets", href: "/tickets" },
-  { icon: UsersRound, label: "Customers", href: "/customers" },
+const authLinks = [
+  { icon: LogIn, label: "Đăng nhập", href: "/login" },
+  { icon: UserPlus, label: "Đăng ký", href: "/register" },
 ];
 
-// Mobile navigation component - hamburger menu cho thiết bị di động
-export default function MobileNav() {
+const navLinks = [
+  { icon: Home, label: "Trang chủ", href: "/home" },
+  { icon: File, label: "Phiếu sửa chữa", href: "/tickets" },
+  { icon: UsersRound, label: "Khách hàng", href: "/customers" },
+];
+
+type MobileNavProps = {
+  isAuthPage?: boolean;
+};
+
+export default function MobileNav({ isAuthPage }: MobileNavProps) {
   const [open, setOpen] = useState(false);
+  const links = isAuthPage ? authLinks : navLinks;
 
   return (
     <>
-      {/* Nút hamburger - chỉ hiển thị trên mobile */}
       <Button
         variant="ghost"
         size="icon"
@@ -29,11 +36,10 @@ export default function MobileNav() {
         {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </Button>
 
-      {/* Dropdown menu trên mobile */}
       {open && (
         <div className="sm:hidden absolute top-full left-0 w-full bg-background border-b shadow-md z-10 page-padding py-4 flex flex-col gap-1">
           <div className="pt-2 border-t mt-1 flex flex-col gap-1">
-            {navLinks.map(({ icon: Icon, label, href }) => (
+            {links.map(({ icon: Icon, label, href }) => (
               <Link
                 key={href}
                 href={href}
