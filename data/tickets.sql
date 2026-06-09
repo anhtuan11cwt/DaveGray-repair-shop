@@ -1,0 +1,16 @@
+INSERT INTO tickets (customer_id, title, description, completed, tech) VALUES
+(1, 'Thay màn hình - iPhone 14', 'Khách làm rơi điện thoại, màn hình bị nứt. Cần thay màn hình mới.', false, 'unassigned'),
+(1, 'Thay pin - MacBook Pro', 'Pin bị phồng, cần thay gấp để đảm bảo an toàn.', false, 'unassigned'),
+(1, 'Phục hồi dữ liệu - ổ cứng gắn ngoài', 'Ổ cứng không quay, cần phục hồi ảnh gia đình.', true, 'unassigned'),
+(2, 'Diệt virus - laptop Windows', 'Laptop bị nhiễm mã độc, chạy rất chậm.', false, 'unassigned'),
+(2, 'Thay bàn phím - Dell XPS', 'Một số phím không hoạt động, bị đổ nước.', true, 'unassigned'),
+(3, 'Cài đặt mạng - văn phòng', 'Cần cấu hình router mới và wifi an toàn cho 15 nhân viên.', false, 'unassigned'),
+(3, 'Máy in không kết nối được', 'Máy in văn phòng báo trạng thái ngoại tuyến, lỗi mạng.', false, 'unassigned'),
+(3, 'Bảo trì máy chủ', 'Kiểm tra và vệ sinh máy chủ định kỳ hàng quý.', true, 'unassigned'),
+(4, 'Build PC mới', 'Khách tự build PC gaming - đã có sẵn linh kiện.', false, 'unassigned'),
+(4, 'Hiệu chỉnh màn hình', 'Màn hình chỉnh sửa ảnh chuyên nghiệp cần hiệu chỉnh màu.', true, 'unassigned'),
+(5, 'Vào nước - iPhone 15', 'Điện thoại rơi xuống hồ bơi, không lên nguồn.', false, 'unassigned'),
+(5, 'iMac chạy chậm', 'iMac chạy rất chậm sau khi cập nhật macOS mới nhất.', false, 'unassigned'),
+(5, 'Nâng cấp ổ cứng - PlayStation 5', 'Nâng cấp SSD nội bộ lên 2TB.', true, 'unassigned'),
+(5, 'Lắp đặt nhà thông minh', 'Cấu hình đèn thông minh, máy điều hòa và camera an ninh.', false, 'unassigned'),
+(5, 'Thiết lập sao lưu dữ liệu', 'Cài đặt sao lưu đám mây tự động cho tất cả thiết bị.', false, 'unassigned');

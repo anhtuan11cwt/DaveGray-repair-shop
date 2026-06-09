@@ -1,7 +1,11 @@
+import { relations } from "drizzle-orm";
 import {
+  boolean,
   integer,
   pgTable,
   primaryKey,
+  serial,
+  text,
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
@@ -48,3 +52,46 @@ export const userPermissions = pgTable(
     pk: primaryKey({ columns: [t.userId, t.permissionId] }),
   }),
 );
+
+// Bảng customers - thông tin khách hàng
+export const customers = pgTable("customers", {
+  id: serial("id").primaryKey(),
+  fullName: varchar("full_name", { length: 200 }).notNull(),
+  email: varchar("email", { length: 255 }).unique().notNull(),
+  phone: varchar("phone", { length: 20 }),
+  address1: varchar("address1", { length: 255 }).notNull(),
+  address2: varchar("address2", { length: 255 }),
+  city: varchar("city", { length: 100 }).notNull(),
+  state: varchar("state", { length: 2 }).notNull(),
+  zip: varchar("zip", { length: 10 }).notNull(),
+  notes: text("notes"),
+  active: boolean("active").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Bảng tickets - vé sửa chữa
+export const tickets = pgTable("tickets", {
+  id: serial("id").primaryKey(),
+  customerId: integer("customer_id")
+    .references(() => customers.id, { onDelete: "cascade" })
+    .notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
+  description: text("description"),
+  completed: boolean("completed").notNull().default(false),
+  tech: varchar("tech", { length: 100 }).default("unassigned"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Relations
+export const customersRelations = relations(customers, ({ many }) => ({
+  tickets: many(tickets),
+}));
+
+export const ticketsRelations = relations(tickets, ({ one }) => ({
+  customer: one(customers, {
+    fields: [tickets.customerId],
+    references: [customers.id],
+  }),
+}));

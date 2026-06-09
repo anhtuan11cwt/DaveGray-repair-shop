@@ -33,6 +33,16 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env
 .env.local
+.env.*.local
+
+# drizzle - generated migration files (can regenerate)
+/drizzle
+
+# IDE
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
 
 # vercel
 .vercel

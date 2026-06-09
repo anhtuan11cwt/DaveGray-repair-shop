@@ -46,6 +46,7 @@
     "lint2": "biome lint --write",
     "start": "next start",
     "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx src/db/migrate.ts",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "db:seed": "tsx scripts/seed.ts"
