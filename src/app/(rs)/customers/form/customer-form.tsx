@@ -1,7 +1,12 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LoaderCircle } from "lucide-react";
+import { useAction } from "next-safe-action/hooks";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { saveCustomerAction } from "@/app/actions/save-customer-action";
+import DisplayServerActionResponse from "@/components/display-server-action-response";
 import { CheckboxWithLabel } from "@/components/inputs/CheckboxWithLabel";
 import { InputWithLabel } from "@/components/inputs/InputWithLabel";
 import { SelectWithLabel } from "@/components/inputs/SelectWithLabel";
@@ -41,8 +46,24 @@ export default function CustomerForm({ customer, isManager }: Props) {
     defaultValues,
   });
 
+  const {
+    execute: executeSave,
+    result: saveResult,
+    isPending: isSaving,
+    reset: resetSaveAction,
+  } = useAction(saveCustomerAction, {
+    onSuccess: ({ data }) => {
+      if (data?.message) {
+        toast.success(data.message);
+      }
+    },
+    onError: () => {
+      toast.error("Lưu thất bại");
+    },
+  });
+
   async function submitForm(data: InsertCustomerSchemaType) {
-    console.log(data);
+    executeSave(data);
   }
 
   return (
@@ -52,6 +73,7 @@ export default function CustomerForm({ customer, isManager }: Props) {
           ? `Chỉnh sửa khách hàng #${customer.id}`
           : "Thêm khách hàng mới"}
       </h2>
+      <DisplayServerActionResponse result={saveResult} />
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(submitForm)}
@@ -108,13 +130,29 @@ export default function CustomerForm({ customer, isManager }: Props) {
               />
             ) : null}
             <div className="flex gap-2">
-              <Button type="submit" variant="default" className="w-3/4">
-                {customer?.id ? "Cập nhật khách hàng" : "Tạo khách hàng"}
+              <Button
+                type="submit"
+                variant="default"
+                className="w-3/4"
+                disabled={isSaving}
+              >
+                {isSaving ? (
+                  <>
+                    <LoaderCircle className="animate-spin" /> Đang lưu...
+                  </>
+                ) : customer?.id ? (
+                  "Cập nhật khách hàng"
+                ) : (
+                  "Tạo khách hàng"
+                )}
               </Button>
               <Button
                 type="button"
                 variant="destructive"
-                onClick={() => form.reset(defaultValues)}
+                onClick={() => {
+                  form.reset(defaultValues);
+                  resetSaveAction();
+                }}
               >
                 Đặt lại
               </Button>

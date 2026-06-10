@@ -1,7 +1,12 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LoaderCircle } from "lucide-react";
+import { useAction } from "next-safe-action/hooks";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { saveTicketAction } from "@/app/actions/save-ticket-action";
+import DisplayServerActionResponse from "@/components/display-server-action-response";
 import { CheckboxWithLabel } from "@/components/inputs/CheckboxWithLabel";
 import { InputWithLabel } from "@/components/inputs/InputWithLabel";
 import { SelectWithLabel } from "@/components/inputs/SelectWithLabel";
@@ -46,8 +51,24 @@ export default function TicketForm({
     defaultValues,
   });
 
+  const {
+    execute: executeSave,
+    result: saveResult,
+    isPending: isSaving,
+    reset: resetSaveAction,
+  } = useAction(saveTicketAction, {
+    onSuccess: ({ data }) => {
+      if (data?.message) {
+        toast.success(data.message);
+      }
+    },
+    onError: () => {
+      toast.error("Lưu thất bại");
+    },
+  });
+
   async function submitForm(data: InsertTicketSchemaType) {
-    console.log(data);
+    executeSave(data);
   }
 
   const ticketLabel = ticket?.id
@@ -59,6 +80,7 @@ export default function TicketForm({
   return (
     <div className="flex flex-col gap-1">
       <h2 className="font-bold text-2xl">{ticketLabel}</h2>
+      <DisplayServerActionResponse result={saveResult} />
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(submitForm)}
@@ -101,13 +123,29 @@ export default function TicketForm({
             />
             {isEditable ? (
               <div className="flex gap-2">
-                <Button type="submit" variant="default" className="w-3/4">
-                  {ticket?.id ? "Cập nhật phiếu" : "Tạo phiếu"}
+                <Button
+                  type="submit"
+                  variant="default"
+                  className="w-3/4"
+                  disabled={isSaving}
+                >
+                  {isSaving ? (
+                    <>
+                      <LoaderCircle className="animate-spin" /> Đang lưu...
+                    </>
+                  ) : ticket?.id ? (
+                    "Cập nhật phiếu"
+                  ) : (
+                    "Tạo phiếu"
+                  )}
                 </Button>
                 <Button
                   type="button"
                   variant="destructive"
-                  onClick={() => form.reset(defaultValues)}
+                  onClick={() => {
+                    form.reset(defaultValues);
+                    resetSaveAction();
+                  }}
                 >
                   Đặt lại
                 </Button>

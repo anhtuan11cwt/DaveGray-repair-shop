@@ -11,4 +11,5 @@ Sentry.init({
   replaysOnErrorSampleRate: 1.0,
   replaysSessionSampleRate: 0.1,
   integrations: [],
+  ignoreErrors: [/^NEXT_REDIRECT$/],
 });
