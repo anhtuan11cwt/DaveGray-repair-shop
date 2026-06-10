@@ -9,6 +9,7 @@ export default function TicketSearch() {
         type="text"
         placeholder="Tìm kiếm phiếu sửa chữa"
         className="w-full"
+        autoFocus
       />
       <SearchButton />
     </form>

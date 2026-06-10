@@ -5,11 +5,11 @@ import DebouncedInput from "@/components/react-table/debounced-input";
 
 type Props<T> = {
   column: Column<T, unknown>;
+  filteredRows?: string[];
 };
 
-export default function Filter<T>({ column }: Props<T>) {
+export default function Filter<T>({ column, filteredRows }: Props<T>) {
   const filterValue = column.getFilterValue() as string;
-  const uniqueValues = column.getFacetedUniqueValues();
 
   const formatValue = (v: unknown) =>
     v instanceof Date
@@ -20,9 +20,11 @@ export default function Filter<T>({ column }: Props<T>) {
         })
       : String(v);
 
-  const sortedUniqueValues = Array.from(
-    new Set(Array.from(uniqueValues.keys()).map(formatValue)),
-  ).sort();
+  const uniqueFilteredValues = filteredRows
+    ? Array.from(new Set(filteredRows.map((v) => formatValue(v))))
+    : Array.from(column.getFacetedUniqueValues().keys()).map(formatValue);
+
+  const sortedUniqueValues = uniqueFilteredValues.sort();
 
   return (
     <>
@@ -31,7 +33,7 @@ export default function Filter<T>({ column }: Props<T>) {
         type="text"
         value={filterValue ?? ""}
         onChange={(value) => column.setFilterValue(value)}
-        placeholder={`Lọc... (${uniqueValues.size})`}
+        placeholder={`Lọc... (${uniqueFilteredValues.length})`}
         list={`${column.id}list`}
         className="w-full border shadow rounded bg-card"
       />

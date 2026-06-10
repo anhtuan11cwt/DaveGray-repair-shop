@@ -20,7 +20,7 @@ export default function Header() {
       <div className="relative flex justify-between items-center py-4 page-padding">
         {/* Logo / Home */}
         <div className="flex items-center gap-2">
-          <NavButton icon={Home} label="Trang chủ" href="/home" />
+          <NavButton icon={Home} label="Trang chủ" href="/tickets" />
           <h1 className="hidden md:block font-bold text-lg">
             Cửa Hàng Sửa Chữa Máy Tính
           </h1>

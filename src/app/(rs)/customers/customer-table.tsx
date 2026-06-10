@@ -6,8 +6,16 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useRouter } from "next/navigation";
+import { MoreHorizontal, TableOfContents } from "lucide-react";
+import Link from "next/link";
 import { useMemo } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -23,8 +31,6 @@ type Props = {
 };
 
 export default function CustomerTable({ data }: Props) {
-  const router = useRouter();
-
   const columnHelper = useMemo(
     () => createColumnHelper<SelectCustomerSchemaType>(),
     [],
@@ -32,6 +38,35 @@ export default function CustomerTable({ data }: Props) {
 
   const columns = useMemo(
     () => [
+      columnHelper.display({
+        id: "actions",
+        header: "Hành động",
+        cell: ({ row }) => (
+          <div className="flex justify-center items-center">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <MoreHorizontal className="size-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem asChild>
+                  <Link href={`/tickets/form?customerId=${row.original.id}`}>
+                    <TableOfContents className="size-4 mr-2" />
+                    Tạo ticket mới
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href={`/customers/form?customerId=${row.original.id}`}>
+                    <MoreHorizontal className="size-4 mr-2" />
+                    Chỉnh sửa khách hàng
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        ),
+      }),
       columnHelper.accessor("fullName", {
         id: "fullName",
         header: "Họ và tên",
@@ -70,7 +105,12 @@ export default function CustomerTable({ data }: Props) {
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
+                <TableHead
+                  key={header.id}
+                  className={
+                    header.id === "actions" ? "w-12 text-center" : undefined
+                  }
+                >
                   {header.isPlaceholder
                     ? null
                     : flexRender(
@@ -84,13 +124,7 @@ export default function CustomerTable({ data }: Props) {
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows.map((row) => (
-            <TableRow
-              key={row.id}
-              className="cursor-pointer hover:bg-border/25 dark:hover:bg-ring/40"
-              onClick={() =>
-                router.push(`/customers/form?customerId=${row.original.id}`)
-              }
-            >
+            <TableRow key={row.id}>
               {row.getVisibleCells().map((cell) => (
                 <TableCell key={cell.id} className="border">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}

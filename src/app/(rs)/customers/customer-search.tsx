@@ -9,6 +9,7 @@ export default function CustomerSearch() {
         type="text"
         placeholder="Tìm kiếm khách hàng"
         className="w-full"
+        autoFocus
       />
       <SearchButton />
     </form>

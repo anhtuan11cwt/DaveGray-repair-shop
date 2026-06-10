@@ -19,8 +19,8 @@ import {
   CircleCheck,
   CircleX,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import Filter from "@/components/react-table/filter";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,6 +31,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { usePolling } from "@/hooks/usePolling";
 import type { TicketSearchResultsType } from "@/lib/queries/get-ticket-search-results";
 
 type RowType = TicketSearchResultsType[number];
@@ -39,12 +40,28 @@ type Props = {
   data: TicketSearchResultsType;
 };
 
+const columnWidths: Record<string, number> = {
+  completed: 150,
+  ticketDate: 150,
+  title: 250,
+  tech: 225,
+  email: 225,
+};
+
 export default function TicketTable({ data }: Props) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([
     { id: "ticketDate", desc: false },
   ]);
+
+  usePolling(10000, searchParams.get("searchText"));
+
+  const pageIndex = useMemo(() => {
+    const page = searchParams.get("page");
+    return page ? Math.max(0, Number.parseInt(page, 10) - 1) : 0;
+  }, [searchParams]);
 
   const columnHelper = useMemo(() => createColumnHelper<RowType>(), []);
 
@@ -52,6 +69,7 @@ export default function TicketTable({ data }: Props) {
     () => [
       columnHelper.accessor("ticketDate", {
         id: "ticketDate",
+        size: columnWidths.ticketDate,
         header: ({ column }) => {
           const sorted = column.getIsSorted();
           return (
@@ -81,6 +99,7 @@ export default function TicketTable({ data }: Props) {
       }),
       columnHelper.accessor("title", {
         id: "title",
+        size: columnWidths.title,
         header: ({ column }) => {
           const sorted = column.getIsSorted();
           return (
@@ -103,6 +122,7 @@ export default function TicketTable({ data }: Props) {
       }),
       columnHelper.accessor("tech", {
         id: "tech",
+        size: columnWidths.tech,
         header: ({ column }) => {
           const sorted = column.getIsSorted();
           return (
@@ -147,6 +167,7 @@ export default function TicketTable({ data }: Props) {
       }),
       columnHelper.accessor("email", {
         id: "email",
+        size: columnWidths.email,
         header: ({ column }) => {
           const sorted = column.getIsSorted();
           return (
@@ -169,6 +190,7 @@ export default function TicketTable({ data }: Props) {
       }),
       columnHelper.accessor("completed", {
         id: "completed",
+        size: columnWidths.completed,
         header: ({ column }) => {
           const sorted = column.getIsSorted();
           return (
@@ -212,6 +234,7 @@ export default function TicketTable({ data }: Props) {
     state: {
       columnFilters,
       sorting,
+      pagination: { pageIndex, pageSize: 10 },
     },
     onColumnFiltersChange: setColumnFilters,
     onSortingChange: setSorting,
@@ -221,14 +244,32 @@ export default function TicketTable({ data }: Props) {
     getFilteredRowModel: getFilteredRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getSortedRowModel: getSortedRowModel(),
-    initialState: {
-      pagination: { pageSize: 10 },
-    },
   });
 
+  const updatePage = (newPageIndex: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", String(newPageIndex + 1));
+    router.replace(`?${params.toString()}`, { scroll: false });
+  };
+
   const totalResults = table.getFilteredRowModel().rows.length;
-  const currentPage = table.getState().pagination.pageIndex + 1;
-  const totalPages = table.getPageCount();
+  const totalPages = Math.max(1, table.getPageCount());
+
+  useEffect(() => {
+    const currentIndex = table.getState().pagination.pageIndex;
+    const pageCount = table.getPageCount();
+    if (pageCount <= currentIndex && currentIndex > 0) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("page", "1");
+      router.replace(`?${params.toString()}`, { scroll: false });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    searchParams.toString,
+    table.getState,
+    table.getPageCount,
+    router.replace,
+  ]);
 
   return (
     <div className="flex flex-col gap-4 mt-6">
@@ -238,7 +279,10 @@ export default function TicketTable({ data }: Props) {
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
+                  <TableHead
+                    key={header.id}
+                    style={{ width: header.column.getSize() || undefined }}
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -247,7 +291,14 @@ export default function TicketTable({ data }: Props) {
                         )}
                     {header.column.getCanFilter() ? (
                       <div className="grid place-content-center">
-                        <Filter column={header.column} />
+                        <Filter
+                          column={header.column}
+                          filteredRows={table
+                            .getFilteredRowModel()
+                            .rows.map((row) =>
+                              String(row.getValue(header.column.id)),
+                            )}
+                        />
                       </div>
                     ) : null}
                   </TableHead>
@@ -289,41 +340,52 @@ export default function TicketTable({ data }: Props) {
         </Table>
       </div>
 
-      <div className="flex justify-between items-center">
+      <div className="flex flex-wrap justify-between items-center gap-2">
         <div className="text-sm text-muted-foreground">
-          Trang {currentPage} / {totalPages} ({totalResults} kết quả)
+          Trang {pageIndex + 1} / {totalPages} ({totalResults} kết quả)
         </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.resetColumnFilters()}
-          >
-            Đặt lại bộ lọc
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.resetSorting()}
-          >
-            Đặt lại sắp xếp
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Trước
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Sau
-          </Button>
+        <div className="flex flex-wrap items-center gap-1">
+          <div className="flex flex-row gap-1">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => updatePage(pageIndex - 1)}
+              disabled={!table.getCanPreviousPage()}
+            >
+              Trước
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => updatePage(pageIndex + 1)}
+              disabled={!table.getCanNextPage()}
+            >
+              Sau
+            </Button>
+          </div>
+          <div className="flex flex-row gap-1">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => router.refresh()}
+            >
+              Làm mới
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.resetSorting()}
+            >
+              Đặt lại sắp xếp
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.resetColumnFilters()}
+            >
+              Đặt lại bộ lọc
+            </Button>
+          </div>
         </div>
       </div>
     </div>
