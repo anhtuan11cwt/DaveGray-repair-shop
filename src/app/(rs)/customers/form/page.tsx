@@ -19,6 +19,7 @@ export async function generateMetadata({
   };
 }
 
+// Trang form thêm/sửa khách hàng
 export default async function CustomerFormPage({
   searchParams,
 }: {
@@ -26,6 +27,7 @@ export default async function CustomerFormPage({
 }) {
   const { customerId } = await searchParams;
 
+  // Kiểm tra quyền manager/admin
   const user = await getCurrentUser();
   const permissions = user ? await getUserPermissions(user.id) : [];
   const isManager =

@@ -16,7 +16,7 @@ type ActionState = {
   success: boolean;
 };
 
-// Action đăng nhập
+// Server action đăng nhập
 export async function loginAction(
   _prevState: ActionState,
   formData: FormData,
@@ -24,12 +24,11 @@ export async function loginAction(
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
 
-  // Validate
   if (!email || !password) {
     return { error: "Vui lòng nhập email và mật khẩu", success: false };
   }
 
-  // Tìm user theo email
+  // Tìm user theo email (lowercase, trim)
   const user = await db.query.users.findFirst({
     where: eq(users.email, email.toLowerCase().trim()),
   });
@@ -38,18 +37,18 @@ export async function loginAction(
     return { error: "Email hoặc mật khẩu không đúng", success: false };
   }
 
-  // Kiểm tra password
+  // Kiểm tra mật khẩu
   const isValid = await verifyPassword(password, user.passwordHash);
   if (!isValid) {
     return { error: "Email hoặc mật khẩu không đúng", success: false };
   }
 
-  // Tạo session
+  // Tạo session đăng nhập
   await createSession(user.id);
   return { error: null, success: true };
 }
 
-// Action đăng ký
+// Server action đăng ký tài khoản mới
 export async function registerAction(
   _prevState: ActionState,
   formData: FormData,
@@ -59,7 +58,6 @@ export async function registerAction(
   const password = formData.get("password") as string;
   const confirmPassword = formData.get("confirmPassword") as string;
 
-  // Validate
   if (!name || !email || !password || !confirmPassword) {
     return { error: "Vui lòng điền đầy đủ thông tin", success: false };
   }
@@ -81,7 +79,7 @@ export async function registerAction(
     return { error: "Email đã được sử dụng", success: false };
   }
 
-  // Tạo user mới
+  // Tạo user mới + gán quyền user mặc định
   const passwordHash = await hashPassword(password);
   const [newUser] = await db
     .insert(users)
@@ -109,12 +107,12 @@ export async function registerAction(
   return { error: null, success: true };
 }
 
-// Action đăng xuất
+// Server action đăng xuất
 export async function logoutAction() {
   await deleteSession();
 }
 
-// Action kiểm tra user hiện tại (dùng cho client components)
+// Lấy thông tin user hiện tại (dùng cho client components)
 export async function getCurrentUserAction() {
   return getCurrentUser();
 }

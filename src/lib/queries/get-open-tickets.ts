@@ -2,6 +2,7 @@ import { asc, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { customers, tickets } from "@/lib/db/schema";
 
+// Lấy danh sách ticket chưa hoàn thành, kèm thông tin khách hàng
 export async function getOpenTickets() {
   const results = await db
     .select({

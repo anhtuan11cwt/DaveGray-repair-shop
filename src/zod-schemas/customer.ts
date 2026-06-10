@@ -2,6 +2,7 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import type { z } from "zod";
 import { customers } from "@/lib/db/schema";
 
+// Schema validation cho thêm/sửa khách hàng
 export const insertCustomerSchema = createInsertSchema(customers, {
   fullName: (schema) => schema.min(1, "Họ và tên là bắt buộc"),
   address1: (schema) => schema.min(1, "Địa chỉ là bắt buộc"),

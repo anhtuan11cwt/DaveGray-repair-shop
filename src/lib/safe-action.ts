@@ -2,6 +2,7 @@ import * as Sentry from "@sentry/nextjs";
 import { createSafeActionClient } from "next-safe-action";
 import { z } from "zod";
 
+// Client cho server actions, tự động bắt lỗi và gửi về Sentry
 export const actionClient = createSafeActionClient({
   defineMetadataSchema: () =>
     z.object({

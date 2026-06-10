@@ -28,6 +28,7 @@ type Props = {
   userEmail: string;
 };
 
+// Form thêm/sửa ticket sửa chữa
 export default function TicketForm({
   customer,
   ticket,
@@ -154,6 +155,7 @@ export default function TicketForm({
           </div>
         </form>
       </Form>
+      {/* Thông tin khách hàng */}
       <div className="mt-4 space-y-2">
         <h3 className="font-bold">Thông tin khách hàng</h3>
         <hr className="w-4/5" />

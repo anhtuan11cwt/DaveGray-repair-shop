@@ -37,7 +37,7 @@ export const permissions = pgTable("permissions", {
   name: varchar("name", { length: 100 }).notNull(),
 });
 
-// Bảng user_permissions - liên kết nhiều-nhiều giữa users và permissions
+// Bảng user_permissions - liên kết nhiều-nhiều users <-> permissions
 export const userPermissions = pgTable(
   "user_permissions",
   {
@@ -84,7 +84,7 @@ export const tickets = pgTable("tickets", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
-// Relations
+// Relations Drizzle ORM
 export const customersRelations = relations(customers, ({ many }) => ({
   tickets: many(tickets),
 }));

@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { customers } from "@/lib/db/schema";
 import { sqlUnaccent } from "@/lib/vietnamese";
 
+// Tìm kiếm khách hàng theo nhiều trường, hỗ trợ tìm không dấu
 export async function getCustomerSearchResults(searchText: string) {
   const results = await db
     .select()

@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import Breadcrumbs from "@/components/breadcrumbs";
 import Header from "@/components/header";
 
-// Layout cho route group (rs) - bao gồm Header, Breadcrumbs và nội dung trang
+// Layout chính cho ứng dụng - header + breadcrumbs + nội dung
 export default function RSLayout({ children }: { children: ReactNode }) {
   return (
     <div className="w-full">

@@ -5,14 +5,14 @@ import { db } from "./db";
 import { permissions, sessions, userPermissions, users } from "./db/schema";
 
 const SESSION_COOKIE_NAME = "session_token";
-const SESSION_MAX_AGE = 60 * 60 * 24 * 7; // 7 ngày (giống Kinde)
+const SESSION_MAX_AGE = 60 * 60 * 24 * 7; // 7 ngày
 
-// Secret key cho JWT
+// Lấy secret key JWT từ biến môi trường
 function getSecret() {
   return new TextEncoder().encode(process.env.SESSION_SECRET);
 }
 
-// Tạo session token JWT
+// Tạo JWT session token
 export async function createSessionToken(userId: number): Promise<string> {
   return new SignJWT({ userId })
     .setProtectedHeader({ alg: "HS256" })
@@ -21,7 +21,7 @@ export async function createSessionToken(userId: number): Promise<string> {
     .sign(getSecret());
 }
 
-// Verify session token JWT
+// Xác thực JWT session token
 export async function verifySessionToken(
   token: string,
 ): Promise<{ userId: number } | null> {
@@ -33,7 +33,7 @@ export async function verifySessionToken(
   }
 }
 
-// Tạo session mới trong DB và set cookie
+// Tạo session mới: lưu vào DB + set cookie
 export async function createSession(userId: number): Promise<string> {
   const token = await createSessionToken(userId);
   const cookieStore = await cookies();
@@ -45,7 +45,7 @@ export async function createSession(userId: number): Promise<string> {
     expiresAt: new Date(Date.now() + SESSION_MAX_AGE * 1000),
   });
 
-  // Set cookie
+  // Set cookie httpOnly
   cookieStore.set(SESSION_COOKIE_NAME, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -57,7 +57,7 @@ export async function createSession(userId: number): Promise<string> {
   return token;
 }
 
-// Lấy session hiện tại từ cookie
+// Lấy session hiện tại từ cookie và verify
 export async function getSession(): Promise<{
   token: string;
   userId: number;
@@ -70,7 +70,7 @@ export async function getSession(): Promise<{
   const payload = await verifySessionToken(token);
   if (!payload) return null;
 
-  // Kiểm tra session có tồn tại trong DB không
+  // Kiểm tra session còn tồn tại trong DB không
   const session = await db.query.sessions.findFirst({
     where: eq(sessions.id, token),
   });
@@ -80,20 +80,18 @@ export async function getSession(): Promise<{
   return { token, userId: payload.userId };
 }
 
-// Xóa session (đăng xuất)
+// Xóa session khỏi DB và cookie (đăng xuất)
 export async function deleteSession(): Promise<void> {
   const cookieStore = await cookies();
   const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
 
   if (token) {
-    // Xóa khỏi DB
     await db.delete(sessions).where(eq(sessions.id, token));
-    // Xóa cookie
     cookieStore.delete(SESSION_COOKIE_NAME);
   }
 }
 
-// Lấy user info từ session
+// Lấy thông tin user từ session hiện tại
 export async function getCurrentUser() {
   const session = await getSession();
   if (!session) return null;
@@ -112,7 +110,7 @@ export async function getCurrentUser() {
   };
 }
 
-// Lấy permissions của user
+// Lấy danh sách permission keys của user
 export async function getUserPermissions(userId: number): Promise<string[]> {
   const result = await db
     .select({ key: permissions.key })
@@ -132,7 +130,7 @@ export async function hasPermission(
   return perms.includes(permissionKey);
 }
 
-// Kiểm tra password
+// So sánh password với hash
 export async function verifyPassword(
   password: string,
   hash: string,

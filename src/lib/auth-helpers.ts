@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { getCurrentUser, getUserPermissions } from "./auth";
 
-// yêu cầu đăng nhập - nếu chưa login thì redirect về /login
+// Yêu cầu đăng nhập, redirect về /login nếu chưa đăng nhập
 export async function requireAuth() {
   const user = await getCurrentUser();
   if (!user) {
@@ -10,7 +10,7 @@ export async function requireAuth() {
   return user;
 }
 
-// yêu cầu permission cụ thể
+// Yêu cầu có permission cụ thể, redirect về /home nếu không có quyền
 export async function requirePermission(permissionKey: string) {
   const user = await requireAuth();
   const permissions = await getUserPermissions(user.id);
@@ -22,7 +22,7 @@ export async function requirePermission(permissionKey: string) {
   return user;
 }
 
-// lấy user hiện tại hoặc null (dùng cho server components)
+// Lấy user hiện tại hoặc null (dùng cho server components không yêu cầu auth)
 export async function getOptionalUser() {
   return getCurrentUser();
 }

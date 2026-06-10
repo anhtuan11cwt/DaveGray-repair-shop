@@ -8,6 +8,7 @@ type Props<T> = {
   filteredRows?: string[];
 };
 
+// Filter input cho bảng react-table
 export default function Filter<T>({ column, filteredRows }: Props<T>) {
   const filterValue = column.getFilterValue() as string;
 

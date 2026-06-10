@@ -2,14 +2,13 @@ import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-// Props cho NavButton component
 type NavButtonProps = {
   icon: LucideIcon;
   label: string;
   href?: string;
 };
 
-// Navigation button - hiển thị icon với label ẩn (cho accessibility)
+// Nút navigation với icon, dùng trong header
 export default function NavButton({ icon: Icon, label, href }: NavButtonProps) {
   return (
     <Button variant="ghost" size="icon" className="rounded-full" asChild>

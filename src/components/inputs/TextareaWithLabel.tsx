@@ -18,6 +18,7 @@ type Props<S> = {
   className?: string;
 } & TextareaHTMLAttributes<HTMLTextAreaElement>;
 
+// Textarea field dùng chung với react-hook-form
 export function TextareaWithLabel<S>({
   fieldTitle,
   nameInSchema,

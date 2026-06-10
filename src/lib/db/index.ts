@@ -2,7 +2,7 @@ import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import * as schema from "./schema";
 
-// Kết nối Neon Postgres using Neon HTTP driver
+// Load biến môi trường khi dev
 if (process.env.NODE_ENV === "development") {
   const dotenv = await import("dotenv");
   dotenv.config({ path: ".env" });
@@ -14,5 +14,5 @@ if (!databaseUrl) {
 }
 const sql = neon(databaseUrl);
 
-// Tạo Drizzle instance với schema
+// Khởi tạo Drizzle ORM với schema
 export const db = drizzle(sql, { schema });

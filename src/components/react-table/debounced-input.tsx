@@ -9,6 +9,7 @@ type Props = {
   debounce?: number;
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange">;
 
+// Input có debounce - delay onChange để tránh gọi quá nhiều
 export default function DebouncedInput({
   value: initialValue,
   onChange,

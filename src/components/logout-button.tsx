@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { logoutAction } from "@/app/(auth)/actions";
 import { Button } from "@/components/ui/button";
 
-// Nút đăng xuất - sử dụng server action
+// Nút đăng xuất
 export default function LogoutButton() {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();

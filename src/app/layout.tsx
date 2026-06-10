@@ -5,10 +5,8 @@ import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 
-// Font Inter với CSS variable để sử dụng trong Tailwind
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
-// Metadata cho SEO - tiêu đề và mô tả trang
 export const metadata: Metadata = {
   title: {
     template: "%s | Cửa Hàng Sửa Chữa Máy Tính",

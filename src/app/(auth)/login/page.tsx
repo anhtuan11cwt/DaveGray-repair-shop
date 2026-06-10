@@ -22,6 +22,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { loginAction } from "../actions";
 
+// Trang đăng nhập
 export default function LoginPage() {
   const router = useRouter();
   const [state, formAction, isPending] = useActionState(loginAction, {

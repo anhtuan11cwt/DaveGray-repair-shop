@@ -25,6 +25,7 @@ type Props = {
   isManager: boolean;
 };
 
+// Form thêm/sửa khách hàng
 export default function CustomerForm({ customer, isManager }: Props) {
   const defaultValues: InsertCustomerSchemaType = {
     id: customer?.id ?? 0,

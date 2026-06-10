@@ -22,6 +22,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { registerAction } from "../actions";
 
+// Trang đăng ký tài khoản mới
 export default function RegisterPage() {
   const router = useRouter();
   const [state, formAction, isPending] = useActionState(registerAction, {

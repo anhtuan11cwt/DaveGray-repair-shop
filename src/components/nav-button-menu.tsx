@@ -14,6 +14,7 @@ type NavButtonMenuProps = {
   choices: { title: string; href: string }[];
 };
 
+// Nút navigation dạng dropdown menu, dùng trong header
 export default function NavButtonMenu({
   icon: Icon,
   label,

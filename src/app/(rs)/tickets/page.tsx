@@ -7,6 +7,7 @@ export const metadata = {
   title: "Tìm kiếm phiếu sửa chữa",
 };
 
+// Trang danh sách/tìm kiếm phiếu sửa chữa
 export default async function TicketsPage({
   searchParams,
 }: {

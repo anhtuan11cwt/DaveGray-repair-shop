@@ -5,6 +5,7 @@ dotenv.config({ path: resolve(__dirname, "../../.env") });
 
 import { migrate } from "drizzle-orm/neon-http/migrator";
 
+// Chạy Drizzle migration
 async function main() {
   const { db } = await import("../lib/db");
 

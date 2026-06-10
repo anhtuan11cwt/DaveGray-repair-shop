@@ -2,6 +2,7 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { tickets } from "@/lib/db/schema";
 
+// Schema validation cho thêm/sửa ticket
 export const insertTicketSchema = createInsertSchema(tickets, {
   id: z.union([z.number(), z.literal("new")]),
   title: (schema) => schema.min(1, "Tiêu đề là bắt buộc"),

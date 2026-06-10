@@ -16,6 +16,7 @@ type ReturnType = {
   message: string;
 };
 
+// Server action - thêm mới hoặc cập nhật ticket sửa chữa
 export const saveTicketAction = actionClient
   .metadata({ actionName: "saveTicketAction" })
   .schema(insertTicketSchema, {
@@ -33,6 +34,7 @@ export const saveTicketAction = actionClient
         redirect("/login");
       }
 
+      // id === "new" => thêm mới, ngược lại => cập nhật
       if (ticket.id === "new") {
         const result = await db
           .insert(tickets)

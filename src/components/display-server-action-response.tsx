@@ -8,6 +8,7 @@ type Props = {
   result: ActionResult | undefined;
 };
 
+// Hiển thị kết quả trả về từ server action (thành công/lỗi validation/lỗi server)
 function MessageBox({
   type,
   content,

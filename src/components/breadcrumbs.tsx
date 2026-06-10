@@ -10,6 +10,7 @@ type BreadcrumbItem = {
   href?: string;
 };
 
+// Định nghĩa đường dẫn breadcrumbs tĩnh cho từng trang
 const staticPaths: Record<string, BreadcrumbItem[]> = {
   "/home": [{ label: "Trang chủ" }],
   "/tickets": [
@@ -103,6 +104,7 @@ function BreadcrumbRender({ items }: { items: BreadcrumbItem[] }) {
   );
 }
 
+// Breadcrumbs bọc trong Suspense để xử lý useSearchParams
 export default function Breadcrumbs() {
   return (
     <Suspense>

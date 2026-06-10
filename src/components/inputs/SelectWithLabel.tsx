@@ -30,6 +30,7 @@ type Props<S> = {
   disabled?: boolean;
 };
 
+// Select field dùng chung với react-hook-form
 export function SelectWithLabel<S>({
   fieldTitle,
   nameInSchema,

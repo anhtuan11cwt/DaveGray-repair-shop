@@ -25,6 +25,7 @@ export async function generateMetadata({
   return { title: `Phiếu mới cho khách hàng #${customerId}` };
 }
 
+// Trang form thêm/sửa ticket sửa chữa
 export default async function TicketFormPage({
   searchParams,
 }: {

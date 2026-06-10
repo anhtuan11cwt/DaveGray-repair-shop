@@ -3,7 +3,7 @@
 import * as Sentry from "@sentry/nextjs";
 import { useEffect } from "react";
 
-// Error Boundary cho các trang con - bắt lỗi và hiển thị UI lỗi
+// Error boundary cho các trang con
 export default function AppError({
   error,
   reset,
@@ -11,7 +11,7 @@ export default function AppError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  // Gửi lỗi đến Sentry khi component mount hoặc error thay đổi
+  // Gửi lỗi đến Sentry khi component mount
   useEffect(() => {
     Sentry.captureException(error);
   }, [error]);

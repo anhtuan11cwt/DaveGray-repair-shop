@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { customers, tickets } from "@/lib/db/schema";
 import { sqlUnaccent } from "@/lib/vietnamese";
 
+// Tìm kiếm ticket theo tiêu đề và thông tin khách hàng, hỗ trợ tìm không dấu
 export async function getTicketSearchResults(searchText: string) {
   const results = await db
     .select({

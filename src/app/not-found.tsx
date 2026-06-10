@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Không Tìm Thấy Trang",
 };
 
+// Trang 404 - hiển thị khi route không tồn tại
 export default function NotFound() {
   return (
     <div className="flex flex-col justify-center items-center gap-6 mx-auto min-h-dvh p-6 text-center">

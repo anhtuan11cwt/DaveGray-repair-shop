@@ -3,7 +3,7 @@
 import * as Sentry from "@sentry/nextjs";
 import { useEffect } from "react";
 
-// Error Boundary cho route group (rs) - bắt lỗi trong phần ứng dụng
+// Error boundary cho route group (rs)
 export default function RSError({
   error,
   reset,

@@ -16,6 +16,7 @@ type ReturnType = {
   message: string;
 };
 
+// Server action - thêm mới hoặc cập nhật khách hàng
 export const saveCustomerAction = actionClient
   .metadata({ actionName: "saveCustomerAction" })
   .schema(insertCustomerSchema, {
@@ -33,6 +34,7 @@ export const saveCustomerAction = actionClient
         redirect("/login");
       }
 
+      // id === 0 => thêm mới, ngược lại => cập nhật
       if (customer.id === 0) {
         const result = await db
           .insert(customers)

@@ -3,7 +3,7 @@
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import type * as React from "react";
 
-// Wrapper component cho next-themes ThemeProvider
+// Wrapper cho next-themes ThemeProvider
 export function ThemeProvider({
   children,
   ...props

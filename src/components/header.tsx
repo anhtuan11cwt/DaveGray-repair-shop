@@ -10,6 +10,7 @@ import NavButton from "@/components/nav-button";
 import NavButtonMenu from "@/components/nav-button-menu";
 import { Button } from "@/components/ui/button";
 
+// Header chính - logo, navigation, theme toggle, logout
 export default function Header() {
   const pathname = usePathname();
   const isAuthPage =
@@ -18,7 +19,7 @@ export default function Header() {
   return (
     <header className="top-0 z-20 sticky bg-background border-b animate-slide">
       <div className="relative flex justify-between items-center py-4 page-padding">
-        {/* Logo / Home */}
+        {/* Logo + tên cửa hàng */}
         <div className="flex items-center gap-2">
           <NavButton icon={Home} label="Trang chủ" href="/tickets" />
           <h1 className="hidden md:block font-bold text-lg">
@@ -26,9 +27,10 @@ export default function Header() {
           </h1>
         </div>
 
-        {/* Bên phải: nav buttons + ModeToggle + Logout + hamburger menu */}
+        {/* Navigation buttons + theme toggle + logout + hamburger */}
         <div className="flex items-center gap-1">
           {isAuthPage ? (
+            // Auth pages: login/register buttons
             <div className="hidden sm:flex items-center gap-1">
               <Button variant="ghost" size="sm" asChild>
                 <Link href="/login">
@@ -44,6 +46,7 @@ export default function Header() {
               </Button>
             </div>
           ) : (
+            // App pages: tickets + customers nav
             <div className="hidden sm:flex items-center gap-1">
               <NavButton icon={File} label="Phiếu sửa chữa" href="/tickets" />
               <NavButtonMenu

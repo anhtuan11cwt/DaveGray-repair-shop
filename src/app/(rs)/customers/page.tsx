@@ -8,6 +8,7 @@ export const metadata = {
   title: "Tìm kiếm khách hàng",
 };
 
+// Trang danh sách/tìm kiếm khách hàng
 export default async function CustomersPage({
   searchParams,
 }: {
@@ -15,6 +16,7 @@ export default async function CustomersPage({
 }) {
   const { searchText } = await searchParams;
 
+  // Không có searchText => hiển thị tất cả
   if (!searchText) {
     const results = await getAllCustomers();
     return (
@@ -29,6 +31,7 @@ export default async function CustomersPage({
     );
   }
 
+  // Có searchText => tìm kiếm
   const span = Sentry.startInactiveSpan({
     name: "getCustomerSearchResults-2",
   });

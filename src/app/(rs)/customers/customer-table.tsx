@@ -30,6 +30,7 @@ type Props = {
   data: SelectCustomerSchemaType[];
 };
 
+// Bảng hiển thị danh sách khách hàng với action dropdown
 export default function CustomerTable({ data }: Props) {
   const columnHelper = useMemo(
     () => createColumnHelper<SelectCustomerSchemaType>(),
@@ -38,6 +39,7 @@ export default function CustomerTable({ data }: Props) {
 
   const columns = useMemo(
     () => [
+      // Cột action: tạo ticket mới hoặc chỉnh sửa
       columnHelper.display({
         id: "actions",
         header: "Hành động",

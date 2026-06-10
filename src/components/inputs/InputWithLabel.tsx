@@ -18,6 +18,7 @@ type Props<S> = {
   className?: string;
 } & InputHTMLAttributes<HTMLInputElement>;
 
+// Input field dùng chung với react-hook-form
 export function InputWithLabel<S>({
   fieldTitle,
   nameInSchema,

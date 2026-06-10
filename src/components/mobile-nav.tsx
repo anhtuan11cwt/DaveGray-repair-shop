@@ -20,6 +20,7 @@ type MobileNavProps = {
   isAuthPage?: boolean;
 };
 
+// Navigation mobile dạng hamburger menu
 export default function MobileNav({ isAuthPage }: MobileNavProps) {
   const [open, setOpen] = useState(false);
   const links = isAuthPage ? authLinks : navLinks;

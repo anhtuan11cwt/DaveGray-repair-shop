@@ -16,6 +16,7 @@ interface BackButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     | "link";
 }
 
+// Nút quay lại trang trước
 export default function BackButton({
   title,
   className,

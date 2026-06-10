@@ -1,6 +1,7 @@
 import SearchButton from "@/components/search-button";
 import { Input } from "@/components/ui/input";
 
+// Form tìm kiếm khách hàng - GET request đến /customers?searchText=
 export default function CustomerSearch() {
   return (
     <form action="/customers" method="GET" className="flex items-center gap-2">
