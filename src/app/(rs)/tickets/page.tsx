@@ -22,7 +22,7 @@ export default async function TicketsPage({
         {results.length > 0 ? (
           <TicketTable data={results} />
         ) : (
-          <p className="mt-4">Không tìm thấy kết quả</p>
+          <p className="mt-4">Không tìm thấy ticket đang mở</p>
         )}
       </div>
     );
