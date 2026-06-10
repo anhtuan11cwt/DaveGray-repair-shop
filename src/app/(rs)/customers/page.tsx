@@ -1,8 +1,27 @@
+import CustomerSearch from "@/app/(rs)/customers/customer-search";
+import { getCustomerSearchResults } from "@/lib/queries/get-customer-search-results";
+
 export const metadata = {
-  title: "Khách hàng",
+  title: "Tìm kiếm khách hàng",
 };
 
-// Trang quản lý khách hàng
-export default function CustomersPage() {
-  return <h2 className="text-2xl font-bold">Khách hàng</h2>;
+export default async function CustomersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+}) {
+  const { searchText } = await searchParams;
+
+  if (!searchText) {
+    return <CustomerSearch />;
+  }
+
+  const results = await getCustomerSearchResults(searchText);
+
+  return (
+    <div>
+      <CustomerSearch />
+      <p>{JSON.stringify(results)}</p>
+    </div>
+  );
 }
