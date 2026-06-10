@@ -14,10 +14,7 @@ export const insertCustomerSchema = createInsertSchema(customers, {
       "Mã bưu chính không hợp lệ. Sử dụng năm chữ số hoặc năm chữ số theo sau là dấu gạch ngang và bốn chữ số",
     ),
   phone: (schema) =>
-    schema.regex(
-      /^\d{3}-\d{3}-\d{4}$/,
-      "Định dạng số điện thoại không hợp lệ. Sử dụng xxx-xxx-xxxx",
-    ),
+    schema.regex(/^\d{10}$/, "Số điện thoại phải có đúng 10 chữ số"),
 });
 
 export const selectCustomerSchema = createSelectSchema(customers);

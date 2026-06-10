@@ -88,7 +88,7 @@ async function seed() {
     {
       fullName: "Nguyễn Văn An",
       email: "nguyenvanan@email.com",
-      phone: "0901-123-456",
+      phone: "0901123456",
       address1: "123 Nguyễn Huệ",
       address2: null,
       city: "Hồ Chí Minh",
@@ -100,7 +100,7 @@ async function seed() {
     {
       fullName: "Trần Thị Bình",
       email: "tranthibinh@email.com",
-      phone: "0902-234-567",
+      phone: "0902234567",
       address1: "456 Lê Lợi",
       address2: "P. 7",
       city: "Hà Nội",
@@ -112,7 +112,7 @@ async function seed() {
     {
       fullName: "Lê Hoàng Cường",
       email: "lehoangcuong@email.com",
-      phone: "0903-345-678",
+      phone: "0903345678",
       address1: "789 Trần Hưng Đạo",
       address2: null,
       city: "Đà Nẵng",
@@ -124,7 +124,7 @@ async function seed() {
     {
       fullName: "Phạm Thị Dung",
       email: "phamthidung@email.com",
-      phone: "0904-456-789",
+      phone: "0904456789",
       address1: "321 Võ Văn Tần",
       address2: "Tòa nhà An Bình",
       city: "Cần Thơ",
@@ -136,7 +136,7 @@ async function seed() {
     {
       fullName: "Hoàng Văn Em",
       email: "hoangvanem@email.com",
-      phone: "0905-567-890",
+      phone: "0905567890",
       address1: "654 Nguyễn Trãi",
       address2: null,
       city: "Hải Phòng",

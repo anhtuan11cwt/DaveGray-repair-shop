@@ -115,7 +115,7 @@ export default function CustomerForm({ customer, isManager }: Props) {
             <InputWithLabel<InsertCustomerSchemaType>
               fieldTitle="Số điện thoại"
               nameInSchema="phone"
-              placeholder="xxx-xxx-xxxx"
+              placeholder="0123456789"
             />
             <TextareaWithLabel<InsertCustomerSchemaType>
               fieldTitle="Ghi chú"
