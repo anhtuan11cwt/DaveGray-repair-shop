@@ -2,16 +2,11 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { CheckboxWithLabel } from "@/components/inputs/CheckboxWithLabel";
+import { InputWithLabel } from "@/components/inputs/InputWithLabel";
+import { TextareaWithLabel } from "@/components/inputs/TextareaWithLabel";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
 import type { SelectCustomerSchemaType } from "@/zod-schemas/customer";
 import {
   type InsertTicketSchemaType,
@@ -54,52 +49,60 @@ export default function TicketForm({ customer, ticket }: Props) {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(submitForm)}
-          className="flex flex-col gap-4"
+          className="flex flex-col md:flex-row gap-4"
         >
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Tiêu đề</FormLabel>
-                <FormControl>
-                  <Input {...field} value={field.value ?? ""} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Mô tả</FormLabel>
-                <FormControl>
-                  <Input {...field} value={field.value ?? ""} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="tech"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email kỹ thuật viên</FormLabel>
-                <FormControl>
-                  <Input {...field} value={field.value ?? ""} type="email" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit" className="w-fit">
-            {ticket?.id ? "Cập nhật phiếu" : "Tạo phiếu"}
-          </Button>
+          <div className="flex flex-col gap-4 w-full">
+            <InputWithLabel<InsertTicketSchemaType>
+              fieldTitle="Tiêu đề"
+              nameInSchema="title"
+            />
+            <InputWithLabel<InsertTicketSchemaType>
+              fieldTitle="Email kỹ thuật viên"
+              nameInSchema="tech"
+              disabled
+            />
+            <CheckboxWithLabel<InsertTicketSchemaType>
+              fieldTitle="Hoàn thành"
+              nameInSchema="completed"
+              message="Có"
+            />
+          </div>
+          <div className="flex flex-col gap-4 w-full">
+            <TextareaWithLabel<InsertTicketSchemaType>
+              fieldTitle="Mô tả"
+              nameInSchema="description"
+              className="h-96"
+            />
+            <div className="flex gap-2">
+              <Button type="submit" variant="default" className="w-3/4">
+                {ticket?.id ? "Cập nhật phiếu" : "Tạo phiếu"}
+              </Button>
+              <Button
+                type="button"
+                variant="destructive"
+                onClick={() => form.reset(defaultValues)}
+              >
+                Đặt lại
+              </Button>
+            </div>
+          </div>
         </form>
       </Form>
+      <div className="mt-4 space-y-2">
+        <h3 className="font-bold">Thông tin khách hàng</h3>
+        <hr className="w-4/5" />
+        <p>{customer.fullName}</p>
+        <p>
+          {customer.address1}
+          {customer.address2 ? `, ${customer.address2}` : ""}
+        </p>
+        <p>
+          {customer.city}, {customer.state} {customer.zip}
+        </p>
+        <hr className="w-4/5" />
+        <p>{customer.email}</p>
+        <p>{customer.phone}</p>
+      </div>
     </div>
   );
 }

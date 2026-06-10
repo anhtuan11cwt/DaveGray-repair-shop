@@ -2,16 +2,12 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { InputWithLabel } from "@/components/inputs/InputWithLabel";
+import { SelectWithLabel } from "@/components/inputs/SelectWithLabel";
+import { TextareaWithLabel } from "@/components/inputs/TextareaWithLabel";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
+import { statesArray } from "@/constants/statesArray";
 import {
   type InsertCustomerSchemaType,
   insertCustomerSchema,
@@ -57,136 +53,64 @@ export default function CustomerForm({ customer }: Props) {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(submitForm)}
-          className="flex flex-col gap-4"
+          className="flex flex-col md:flex-row gap-4"
         >
-          <FormField
-            control={form.control}
-            name="fullName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Họ và tên</FormLabel>
-                <FormControl>
-                  <Input {...field} value={field.value ?? ""} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input {...field} value={field.value ?? ""} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Số điện thoại</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    value={field.value ?? ""}
-                    placeholder="xxx-xxx-xxxx"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="address1"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Địa chỉ</FormLabel>
-                <FormControl>
-                  <Input {...field} value={field.value ?? ""} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="address2"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Địa chỉ dòng 2</FormLabel>
-                <FormControl>
-                  <Input {...field} value={field.value ?? ""} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="city"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Thành phố</FormLabel>
-                <FormControl>
-                  <Input {...field} value={field.value ?? ""} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="state"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Tỉnh/Thành phố</FormLabel>
-                <FormControl>
-                  <Input {...field} value={field.value ?? ""} maxLength={2} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="zip"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Mã bưu chính</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    value={field.value ?? ""}
-                    placeholder="12345 hoặc 12345-6789"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="notes"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Ghi chú</FormLabel>
-                <FormControl>
-                  <Input {...field} value={field.value ?? ""} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit" className="w-fit">
-            {customer?.id ? "Cập nhật khách hàng" : "Tạo khách hàng"}
-          </Button>
+          <div className="flex flex-col gap-4 w-full">
+            <InputWithLabel<InsertCustomerSchemaType>
+              fieldTitle="Họ và tên"
+              nameInSchema="fullName"
+            />
+            <InputWithLabel<InsertCustomerSchemaType>
+              fieldTitle="Địa chỉ"
+              nameInSchema="address1"
+            />
+            <InputWithLabel<InsertCustomerSchemaType>
+              fieldTitle="Địa chỉ dòng 2"
+              nameInSchema="address2"
+            />
+            <InputWithLabel<InsertCustomerSchemaType>
+              fieldTitle="Thành phố"
+              nameInSchema="city"
+            />
+            <SelectWithLabel<InsertCustomerSchemaType>
+              fieldTitle="Tỉnh/Thành phố"
+              nameInSchema="state"
+              data={statesArray}
+            />
+          </div>
+          <div className="flex flex-col gap-4 w-full">
+            <InputWithLabel<InsertCustomerSchemaType>
+              fieldTitle="Mã bưu chính"
+              nameInSchema="zip"
+              placeholder="12345 hoặc 12345-6789"
+            />
+            <InputWithLabel<InsertCustomerSchemaType>
+              fieldTitle="Email"
+              nameInSchema="email"
+            />
+            <InputWithLabel<InsertCustomerSchemaType>
+              fieldTitle="Số điện thoại"
+              nameInSchema="phone"
+              placeholder="xxx-xxx-xxxx"
+            />
+            <TextareaWithLabel<InsertCustomerSchemaType>
+              fieldTitle="Ghi chú"
+              nameInSchema="notes"
+              className="h-40"
+            />
+            <div className="flex gap-2">
+              <Button type="submit" variant="default" className="w-3/4">
+                {customer?.id ? "Cập nhật khách hàng" : "Tạo khách hàng"}
+              </Button>
+              <Button
+                type="button"
+                variant="destructive"
+                onClick={() => form.reset(defaultValues)}
+              >
+                Đặt lại
+              </Button>
+            </div>
+          </div>
         </form>
       </Form>
     </div>
