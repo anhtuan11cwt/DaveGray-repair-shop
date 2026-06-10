@@ -5,6 +5,7 @@ import { customers, tickets } from "@/lib/db/schema";
 export async function getOpenTickets() {
   const results = await db
     .select({
+      id: tickets.id,
       ticketDate: tickets.createdAt,
       title: tickets.title,
       fullName: customers.fullName,

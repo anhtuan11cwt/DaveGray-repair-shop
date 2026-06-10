@@ -1,4 +1,5 @@
 import TicketSearch from "@/app/(rs)/tickets/ticket-search";
+import TicketTable from "@/app/(rs)/tickets/ticket-table";
 import { getOpenTickets } from "@/lib/queries/get-open-tickets";
 import { getTicketSearchResults } from "@/lib/queries/get-ticket-search-results";
 
@@ -18,7 +19,11 @@ export default async function TicketsPage({
     return (
       <div>
         <TicketSearch />
-        <p>{JSON.stringify(results)}</p>
+        {results.length > 0 ? (
+          <TicketTable data={results} />
+        ) : (
+          <p className="mt-4">Không tìm thấy kết quả</p>
+        )}
       </div>
     );
   }
@@ -27,7 +32,11 @@ export default async function TicketsPage({
   return (
     <div>
       <TicketSearch />
-      <p>{JSON.stringify(results)}</p>
+      {results.length > 0 ? (
+        <TicketTable data={results} />
+      ) : (
+        <p className="mt-4">Không tìm thấy kết quả</p>
+      )}
     </div>
   );
 }
