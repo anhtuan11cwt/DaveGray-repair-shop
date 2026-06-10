@@ -1,4 +1,5 @@
 import * as Sentry from "@sentry/nextjs";
+import TicketForm from "@/app/(rs)/tickets/form/ticket-form";
 import BackButton from "@/components/back-button";
 import { getCustomer } from "@/lib/queries/getCustomer";
 import { getTicket } from "@/lib/queries/getTicket";
@@ -53,8 +54,7 @@ export default async function TicketFormPage({
       );
     }
 
-    console.log("customer", customer);
-    return <h2 className="text-2xl font-bold">Tạo phiếu sửa chữa mới</h2>;
+    return <TicketForm customer={customer} />;
   }
 
   if (ticketId) {
@@ -87,8 +87,6 @@ export default async function TicketFormPage({
       throw error;
     }
 
-    console.log("ticket", ticket);
-    console.log("customer", customer);
-    return <h2 className="text-2xl font-bold">Chỉnh sửa phiếu sửa chữa</h2>;
+    return <TicketForm customer={customer} ticket={ticket} />;
   }
 }

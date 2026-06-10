@@ -1,4 +1,5 @@
 import * as Sentry from "@sentry/nextjs";
+import CustomerForm from "@/app/(rs)/customers/form/customer-form";
 import BackButton from "@/components/back-button";
 import { getCustomer } from "@/lib/queries/getCustomer";
 
@@ -30,11 +31,8 @@ export default async function CustomerFormPage({
       );
     }
 
-    console.log("customer", customer);
-    return (
-      <h2 className="text-2xl font-bold">Chỉnh sửa thông tin khách hàng</h2>
-    );
+    return <CustomerForm customer={customer} />;
   }
 
-  return <h2 className="text-2xl font-bold">Thêm khách hàng mới</h2>;
+  return <CustomerForm />;
 }
