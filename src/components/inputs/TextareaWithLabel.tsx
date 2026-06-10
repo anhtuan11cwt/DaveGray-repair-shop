@@ -39,7 +39,11 @@ export function TextareaWithLabel<S>({
             <Textarea
               id={nameInSchema}
               {...field}
-              className={cn(className)}
+              className={cn(
+                "w-full",
+                "disabled:text-blue-500 dark:disabled:text-yellow-300 disabled:opacity-75",
+                className,
+              )}
               {...props}
               value={field.value ?? ""}
             />

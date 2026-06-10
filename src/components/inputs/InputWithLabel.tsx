@@ -39,7 +39,7 @@ export function InputWithLabel<S>({
               {...field}
               className={cn(
                 "w-full",
-                "disabled:text-blue-500 dark:disabled:text-green-500 disabled:opacity-75",
+                "disabled:text-blue-500 dark:disabled:text-yellow-300 disabled:opacity-75",
                 className,
               )}
               {...props}

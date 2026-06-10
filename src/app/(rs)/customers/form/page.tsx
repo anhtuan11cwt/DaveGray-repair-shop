@@ -1,7 +1,23 @@
 import * as Sentry from "@sentry/nextjs";
+import type { Metadata } from "next";
 import CustomerForm from "@/app/(rs)/customers/form/customer-form";
 import BackButton from "@/components/back-button";
+import { getCurrentUser, getUserPermissions } from "@/lib/auth";
 import { getCustomer } from "@/lib/queries/getCustomer";
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+}): Promise<Metadata> {
+  const { customerId } = await searchParams;
+
+  return {
+    title: customerId
+      ? `Chỉnh sửa khách hàng #${customerId}`
+      : "Thêm khách hàng mới",
+  };
+}
 
 export default async function CustomerFormPage({
   searchParams,
@@ -9,6 +25,11 @@ export default async function CustomerFormPage({
   searchParams: Promise<{ [key: string]: string | undefined }>;
 }) {
   const { customerId } = await searchParams;
+
+  const user = await getCurrentUser();
+  const permissions = user ? await getUserPermissions(user.id) : [];
+  const isManager =
+    permissions.includes("manager") || permissions.includes("admin");
 
   if (customerId) {
     let customer: Awaited<ReturnType<typeof getCustomer>>;
@@ -31,8 +52,8 @@ export default async function CustomerFormPage({
       );
     }
 
-    return <CustomerForm customer={customer} />;
+    return <CustomerForm customer={customer} isManager={isManager} />;
   }
 
-  return <CustomerForm />;
+  return <CustomerForm isManager={isManager} />;
 }

@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { CheckboxWithLabel } from "@/components/inputs/CheckboxWithLabel";
 import { InputWithLabel } from "@/components/inputs/InputWithLabel";
 import { SelectWithLabel } from "@/components/inputs/SelectWithLabel";
 import { TextareaWithLabel } from "@/components/inputs/TextareaWithLabel";
@@ -16,9 +17,10 @@ import {
 
 type Props = {
   customer?: SelectCustomerSchemaType;
+  isManager: boolean;
 };
 
-export default function CustomerForm({ customer }: Props) {
+export default function CustomerForm({ customer, isManager }: Props) {
   const defaultValues: InsertCustomerSchemaType = {
     id: customer?.id ?? 0,
     fullName: customer?.fullName ?? "",
@@ -47,7 +49,7 @@ export default function CustomerForm({ customer }: Props) {
     <div className="flex flex-col gap-1">
       <h2 className="font-bold text-2xl">
         {customer?.id
-          ? "Chỉnh sửa thông tin khách hàng"
+          ? `Chỉnh sửa khách hàng #${customer.id}`
           : "Thêm khách hàng mới"}
       </h2>
       <Form {...form}>
@@ -98,6 +100,13 @@ export default function CustomerForm({ customer }: Props) {
               nameInSchema="notes"
               className="h-40"
             />
+            {isManager && customer?.id ? (
+              <CheckboxWithLabel<InsertCustomerSchemaType>
+                fieldTitle="Hoạt động"
+                nameInSchema="active"
+                message="Có"
+              />
+            ) : null}
             <div className="flex gap-2">
               <Button type="submit" variant="default" className="w-3/4">
                 {customer?.id ? "Cập nhật khách hàng" : "Tạo khách hàng"}

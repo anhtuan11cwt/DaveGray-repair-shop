@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { CheckboxWithLabel } from "@/components/inputs/CheckboxWithLabel";
 import { InputWithLabel } from "@/components/inputs/InputWithLabel";
+import { SelectWithLabel } from "@/components/inputs/SelectWithLabel";
 import { TextareaWithLabel } from "@/components/inputs/TextareaWithLabel";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
@@ -17,9 +18,19 @@ import {
 type Props = {
   customer: SelectCustomerSchemaType;
   ticket?: SelectTicketSchemaType;
+  isEditable: boolean;
+  techs?: { id: string; description: string }[];
+  userEmail: string;
 };
 
-export default function TicketForm({ customer, ticket }: Props) {
+export default function TicketForm({
+  customer,
+  ticket,
+  isEditable,
+  techs,
+}: Props) {
+  const isManager = Array.isArray(techs);
+
   const defaultValues: InsertTicketSchemaType = {
     id: ticket?.id ?? "new",
     customerId: ticket?.customerId ?? customer.id,
@@ -40,7 +51,9 @@ export default function TicketForm({ customer, ticket }: Props) {
   }
 
   const ticketLabel = ticket?.id
-    ? `Chỉnh sửa phiếu #${ticket.id}`
+    ? isEditable
+      ? `Chỉnh sửa phiếu #${ticket.id}`
+      : `Xem phiếu #${ticket.id}`
     : "Tạo phiếu sửa chữa mới";
 
   return (
@@ -55,36 +68,51 @@ export default function TicketForm({ customer, ticket }: Props) {
             <InputWithLabel<InsertTicketSchemaType>
               fieldTitle="Tiêu đề"
               nameInSchema="title"
+              disabled={!isEditable}
             />
-            <InputWithLabel<InsertTicketSchemaType>
-              fieldTitle="Email kỹ thuật viên"
-              nameInSchema="tech"
-              disabled
-            />
-            <CheckboxWithLabel<InsertTicketSchemaType>
-              fieldTitle="Hoàn thành"
-              nameInSchema="completed"
-              message="Có"
-            />
+            {isManager ? (
+              <SelectWithLabel<InsertTicketSchemaType>
+                fieldTitle="Email kỹ thuật viên"
+                nameInSchema="tech"
+                data={techs}
+              />
+            ) : (
+              <InputWithLabel<InsertTicketSchemaType>
+                fieldTitle="Email kỹ thuật viên"
+                nameInSchema="tech"
+                disabled
+              />
+            )}
+            {ticket?.id ? (
+              <CheckboxWithLabel<InsertTicketSchemaType>
+                fieldTitle="Hoàn thành"
+                nameInSchema="completed"
+                message="Có"
+                disabled={!isEditable}
+              />
+            ) : null}
           </div>
           <div className="flex flex-col gap-4 w-full">
             <TextareaWithLabel<InsertTicketSchemaType>
               fieldTitle="Mô tả"
               nameInSchema="description"
               className="h-96"
+              disabled={!isEditable}
             />
-            <div className="flex gap-2">
-              <Button type="submit" variant="default" className="w-3/4">
-                {ticket?.id ? "Cập nhật phiếu" : "Tạo phiếu"}
-              </Button>
-              <Button
-                type="button"
-                variant="destructive"
-                onClick={() => form.reset(defaultValues)}
-              >
-                Đặt lại
-              </Button>
-            </div>
+            {isEditable ? (
+              <div className="flex gap-2">
+                <Button type="submit" variant="default" className="w-3/4">
+                  {ticket?.id ? "Cập nhật phiếu" : "Tạo phiếu"}
+                </Button>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={() => form.reset(defaultValues)}
+                >
+                  Đặt lại
+                </Button>
+              </div>
+            ) : null}
           </div>
         </form>
       </Form>
